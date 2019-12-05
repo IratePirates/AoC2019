@@ -1,5 +1,13 @@
 from int_compute import *
 
+def test_0():
+  i = [1,1,1,4,99,5,6,0,99]
+  in_data = []
+  exp_i = [30,1,1,4,2,5,6,0,99]
+
+  run_prog(i, in_data)
+  print("Test 0: ", exp_i, " =? ", i )
+
 def test_1():
   i = [3,0,4,0,99]
   in_data = [1616]
@@ -30,6 +38,7 @@ def run_part_1():
   print(run_prog(i, in_data))
 
 if __name__ == "__main__":
+  test_0()
   test_1()
   test_2()
   test_3()
