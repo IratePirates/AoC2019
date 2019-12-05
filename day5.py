@@ -30,7 +30,7 @@ def test_3():
   exp_i = [1101,100,-1,4,99]
 
   run_prog(i, in_data)
-  print("Test 2: ", exp_i, " =? ", i )
+  print("Test 3: ", exp_i, " =? ", i )
 
 def run_part_1():
   i = load_input("day5")

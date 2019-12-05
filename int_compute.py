@@ -25,13 +25,12 @@ def interp(line, buffer, input=[]):
       ins_len = 2
 
     elif op == 1:      # Add
-
-      if ((line[0]&100)//100 == 1):
+      if (line[0] // 100 % 10) == 0:
         par1 = buffer[line[1]]
       else:
         par1 = line[1]
 
-      if ((line[0]&1000)//1000 == 1):
+      if (line[0] // 1000 % 10) == 0:
         par2 = buffer[line[2]]
       else:
         par2 = line[2]
@@ -40,12 +39,12 @@ def interp(line, buffer, input=[]):
       ins_len = 4
 
     elif op == 2:      # Mult
-      if ((line[0]&100)//100 == 1):
+      if (line[0] // 100 % 10) == 0:
         par1 = buffer[line[1]]
       else:
         par1 = line[1]
 
-      if ((line[0]&1000)//1000 == 1):
+      if (line[0] // 1000 % 10) == 0:
         par2 = buffer[line[2]]
       else:
         par2 = line[2]
