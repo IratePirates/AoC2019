@@ -32,9 +32,27 @@ def test_3():
   run_prog(i, in_data)
   print("Test 3: ", exp_i, " =? ", i )
 
+def test_4():
+  i = [3,9,8,9,10,9,4,9,99,-1,8]
+  in_data = [0]
+  exp_out = [0]
+  out = run_prog(i, in_data)
+  print("Test 4: ", exp_out, " =? ", out )
+
+  in_data = [8]
+  exp_out = [1]
+  out = run_prog(i, in_data)
+  print("Test 4: ", exp_out, " =? ", out )
+
+
 def run_part_1():
   i = load_input("day5")
   in_data = [1]
+  print(run_prog(i, in_data))
+
+def run_part_2():
+  i = load_input("day5")
+  in_data = [5]
   print(run_prog(i, in_data))
 
 if __name__ == "__main__":
@@ -42,4 +60,6 @@ if __name__ == "__main__":
   test_1()
   test_2()
   test_3()
+  test_4()
   run_part_1()
+  run_part_2()
