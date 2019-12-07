@@ -42,6 +42,16 @@ def calc_upsteam_distance(graph, start_node):
       distance += 1
     return distance - 1
 
+def calc_upsteam_path(graph, start_node):
+    # find upstream node
+    res = start_node
+    path = []
+    while res is not None:
+      res = get_parent(graph, res)
+      if res:
+        path += [res]
+    return path
+
 def all_nodes(graph):
   planets = []
   for point, orbits in graph.items():
@@ -50,13 +60,15 @@ def all_nodes(graph):
 
 def calc_total_orbits(graph):
   res = 0
-  print(all_nodes(graph))
   for point in all_nodes(graph):
-    res += calc_upsteam_distance(graph, point)
+    res += len(calc_upsteam_path(graph, point))
   return res
 
 def test_1():
   graph = parse_graph(test1_data)
+
+  print(calc_upsteam_distance(graph, "B"))
+  print(calc_upsteam_path(graph, "C"))
   links = calc_total_orbits(graph)
   print("Test 1: ", links, " =? ",  42 )
 
@@ -64,6 +76,29 @@ def part_1():
   graph = parse_graph(load_input("day6"))
   print(calc_total_orbits(graph))
 
+def part_2():
+  graph = parse_graph(load_input("day6"))
+
+  a = calc_upsteam_path(graph, "SAN")
+  b = calc_upsteam_path(graph, "YOU")
+
+  a_path = []
+  for stop in a:
+    if stop not in b:
+      a_path += [stop]
+    else:
+      break
+
+  b_path = []
+  for stop in b:
+    if stop not in a:
+      b_path += [stop]
+    else:
+      break
+
+  return len(a_path) + len(b_path)
+
 if __name__ == "__main__":
   test_1()
   part_1()
+  part_2()
