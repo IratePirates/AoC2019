@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 def load_input(filename):
   input = []
   with open(filename, 'r')  as f:
@@ -8,19 +10,41 @@ def load_input(filename):
 
 
 class int_computer(object):
-  def __init__(self, input_inst, input=[]):
-    self.prog  = input_inst
-    self.output = []
-    self.input = input
+  def __init__(self, input_inst, input_values=None, tag=""):
+    self.prog = deepcopy(input_inst)
+    self._output = []
+    self.input = []
+    if input_values != None:
+      self.input += input_values
     self.pc = 0
+    self.running = True
+    self.stalled = False
+    self.tag=tag
 
+  @property
+  def output(self):
+    res = self._output
+    self._output = []
+    return res
+  
   def run(self):
-    res = 1 #placeholder vlaue
-    while res > 0:
-      res, tmp_out = self.interpret_line(self.prog[self.pc:self.pc+4],
-                            input)
-      if tmp_out != None:
-        self.output.append(tmp_out)
+    while self.running:
+      self.step()
+
+  def step(self):
+    _, tmp_out = self.interpret_line(self.prog[self.pc:self.pc+4])
+    if tmp_out != []:
+      self._output += tmp_out
+
+  def run_until_input(self, additional_input=None):
+    res = 1
+    self.stalled = False
+    while self.running and not self.stalled:
+      res, tmp_out = self.interpret_line(self.prog[self.pc:self.pc+4])
+      if tmp_out != []:
+        self._output.append(*tmp_out)
+    # print("Computer {} - Is Stalled? {}".format(self.tag, self.stalled),
+    #       " Is Running? {}". format(self.running))
 
   def get_par1(self, line):
     if (line[0] // 100 % 10) == 0:
@@ -36,23 +60,31 @@ class int_computer(object):
       par1 = line[2]
     return par1
 
-  def interpret_line(self, line, input=[]):
+  def interpret_line(self, line):
     ins_len = -1
-    res = None
+    res = []
+
+    if not self.running:
+      return ins_len, res
 
     try:
       op = line[0] % 100
 
       if op == 99:       # end
         ins_len = 0
+        self.running = False
 
       elif op == 3:      # load
-        self.prog[line[1]] = self.input.pop(0)
-        ins_len = 2
-        self.pc += ins_len
+        try:
+          self.prog[line[1]] = self.input.pop(0)
+          ins_len = 2
+          self.pc += ins_len
+        except IndexError:
+          ins_len = 0
+          self.stalled = True
 
-      elif op == 4:      # output
-        res = self.prog[line[1]]
+      elif op == 4:      # _output
+        res = [self.prog[line[1]]]
         ins_len = 2
         self.pc += ins_len
 
@@ -97,13 +129,13 @@ class int_computer(object):
         self.pc += ins_len
 
     except IndexError:
-      print("Bad instruction?", line)
+      print("Bad instruction? [", self.pc, "] - ", line)
       raise
 
     return ins_len, res
 
-def run_prog(instructions, input=[]):
+def run_prog(instructions, in_data=None):
   computer = int_computer(input_inst=instructions,
-                          input=input)
+                          input_values=in_data)
   computer.run()
-  return(computer.output)
+  return computer._output
