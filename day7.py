@@ -28,9 +28,9 @@ def run_part_1():
       in_data = [int(str(input_sig)[i])] + output
       output = run_prog(ins, in_data)
 
-    all_output.append(output[0])
+    all_output.append(output)
 
-  return(max(all_output))
+  print(max(all_output))
 
 def run_part_2():
   input_codes = generate_inputs(5,9)
@@ -80,5 +80,5 @@ def run_part_2():
   print(max(thrust_results))
 
 if __name__ == "__main__":
-  print(run_part_1())
-  print(run_part_2())
+  run_part_1()
+  run_part_2()
