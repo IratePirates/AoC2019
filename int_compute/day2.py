@@ -2,8 +2,6 @@ from int_compute import (load_input,
                          interp,
                          run_prog)
 
-test1=[1,0,0,3,99]
-
 def run_part_1():
   i = load_input("day2")
   i[1] = 12
